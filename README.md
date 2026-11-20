@@ -4,7 +4,7 @@ SignalK plugin for interfacing with [Brineomatic](https://brineomatic.com) water
 
 ## SFH008 controls and alarms
 
-This branch builds on upstream v1.5.0. The package version `1.5.0+sfh.4` uses SemVer build metadata, so Signal K treats it as the same precedence as upstream `1.5.0` and still offers newer upstream releases.
+This branch builds on upstream v1.5.0. The package version `1.5.0+sfh.5` uses SemVer build metadata, so Signal K treats it as the same precedence as upstream `1.5.0` and still offers newer upstream releases.
 
 Open **Brineomatic** from Signal K Webapps. Each board exposes the momentary controls `watermaker.<boardname>.controls.{start,stop,flush}.state`. Write `1` or `true` to activate a control.
 

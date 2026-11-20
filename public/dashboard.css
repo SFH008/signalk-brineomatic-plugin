@@ -74,3 +74,19 @@ dialog p { color: inherit; margin: 0 0 16px; }
   .detail { grid-template-columns: 1fr; }
   #sensors { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+.embedded main { max-width: none; padding: 12px; }
+.embedded header { margin-bottom: 12px; }
+.embedded h1 { font-size: 1.5rem; }
+.embedded .panel { padding: 12px; }
+.embedded .detail { gap: 10px; margin-top: 10px; }
+.embedded .grid { gap: 6px; margin-top: 8px; }
+.embedded .tile { padding: 8px; }
+.embedded dd { margin-top: 4px; font-size: 1rem; }
+@media (min-width: 820px) {
+  .embedded #controls { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .embedded #sensors { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 560px) and (max-width: 690px) {
+  .embedded .detail { grid-template-columns: 2fr 1fr; }
+}

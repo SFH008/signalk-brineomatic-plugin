@@ -1,4 +1,7 @@
 const root = "/plugins/signalk-brineomatic-plugin/watermakers";
+if (window.self !== window.top)
+  document.documentElement.classList.add("embedded");
+
 const select = document.querySelector("#board");
 const connection = document.querySelector("#connection");
 const feedback = document.querySelector("#feedback");

@@ -53,6 +53,7 @@ test("exposes the Freeboard dashboard while the plugin is running", async () => 
   assert.equal(manifest.version, require("../package.json").version);
   assert.equal(button.slot, "mapToolbar");
   assert.equal(button.action.type, "toggleWindow");
+  assert.deepEqual(button.action.geometry, { anchor: "top-right", width: 1120, height: 820 });
   assert.equal(button.action.panel, panel.id);
   assert.equal(panel.url, `/${plugin.id}/dashboard.html`);
   assert.equal(await methods.getResource(plugin.id), manifest);

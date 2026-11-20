@@ -14,8 +14,9 @@ module.exports = function createPlotterExtension(app, pluginId, version) {
       action: {
         type: "toggleWindow",
         panel,
-        geometry: { anchor: "top-right", width: 680, height: 640 },
-        restoreKey: "brineomatic-watermaker",
+        geometry: { anchor: "top-right", width: 1120, height: 820 },
+        // Let Freeboard save the new geometry independently of the smaller layout.
+        restoreKey: "brineomatic-dashboard",
       },
     }],
     panels: [{
