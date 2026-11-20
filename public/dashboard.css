@@ -59,6 +59,17 @@ dd { margin: 6px 0 0; font: 650 1.15rem ui-monospace, monospace; overflow-wrap: 
 [data-tone="orange"] { color: var(--orange); }
 [data-tone="red"] { color: var(--red); }
 #feedback { border-left: 2px solid currentColor; padding: 8px 12px; margin-top: 12px; }
+dialog {
+  max-width: min(420px, calc(100% - 32px));
+  background: var(--panel);
+  border: 1px solid var(--teal);
+  color: inherit;
+  padding: 20px;
+}
+dialog::backdrop { background: rgb(0 0 0 / 65%); }
+dialog p { color: inherit; margin: 0 0 16px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+#confirm-submit { --accent: var(--teal); }
 @media (max-width: 690px) {
   .detail { grid-template-columns: 1fr; }
   #sensors { grid-template-columns: repeat(2, minmax(0, 1fr)); }

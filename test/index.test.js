@@ -36,6 +36,39 @@ test("plugin metadata and schema", () => {
   assert.equal(props.battery_level_path.default, "");
 });
 
+test("exposes the Freeboard dashboard while the plugin is running", async () => {
+  const app = createFakeApp();
+  const providers = [];
+  app.registerResourceProvider = (provider) => providers.push(provider);
+  const plugin = createPlugin(app);
+  plugin.start({});
+
+  assert.equal(providers.length, 1);
+  const [provider] = providers;
+  assert.equal(provider.type, "plotterExtensions");
+  const { methods } = provider;
+  const { [plugin.id]: manifest } = await methods.listResources();
+  const [button] = manifest.buttons;
+  const [panel] = manifest.panels;
+  assert.equal(manifest.version, require("../package.json").version);
+  assert.equal(button.slot, "mapToolbar");
+  assert.equal(button.action.type, "toggleWindow");
+  assert.equal(button.action.panel, panel.id);
+  assert.equal(panel.url, `/${plugin.id}/dashboard.html`);
+  assert.equal(await methods.getResource(plugin.id), manifest);
+  await assert.rejects(methods.getResource("unknown"), /No such/);
+  await assert.rejects(methods.setResource(), /read-only/);
+  await assert.rejects(methods.deleteResource(), /read-only/);
+
+  plugin.stop();
+  assert.deepEqual(await methods.listResources(), {});
+  await assert.rejects(methods.getResource(plugin.id), /No such/);
+  plugin.start({});
+  assert.equal(providers.length, 2);
+  assert.deepEqual(await providers[1].methods.listResources(), { [plugin.id]: manifest });
+  plugin.stop();
+});
+
 test("SignalK -> board sensor forwarding", async (t) => {
   // Stand-in for a yarrboard connection that records set_watermaker sends.
   function createFakeBoard(overrides = {}) {

@@ -3,6 +3,9 @@ const select = document.querySelector("#board");
 const connection = document.querySelector("#connection");
 const feedback = document.querySelector("#feedback");
 const buttons = [...document.querySelectorAll("[data-action]")];
+const confirmation = document.querySelector("#confirm-operation");
+const confirmMessage = document.querySelector("#confirm-message");
+const confirmSubmit = document.querySelector("#confirm-submit");
 const number = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 });
 const units = (suffix, convert = (value) => value) => (value) => `${number.format(convert(value))} ${suffix}`;
 const duration = (seconds) => {
@@ -148,14 +151,28 @@ select.addEventListener("change", () => {
   render();
 });
 
+async function confirmOperation(label, board) {
+  confirmation.returnValue = "";
+  confirmMessage.textContent = `${label} watermaker on ${board.name || board.host}?`;
+  confirmSubmit.textContent = label;
+  confirmation.showModal();
+  await new Promise((resolve) => confirmation.addEventListener("close", resolve, { once: true }));
+  return confirmation.returnValue === "confirm";
+}
+
 for (const button of buttons) {
   button.addEventListener("click", async () => {
     const board = selected();
     const { action } = button.dataset;
     if (pending || !board?.actions[action])
       return;
-    if (action !== "stop" && !window.confirm(`${button.textContent} watermaker on ${board.name || board.host}?`))
-      return;
+    if (action !== "stop") {
+      if (confirmation.open || !await confirmOperation(button.textContent, board))
+        return;
+      const current = selected();
+      if (pending || current?.host !== board.host || current?.index !== board.index || !current.actions[action])
+        return;
+    }
     pending = true;
     announce("Waiting for the watermaker to acknowledge…", "teal");
     render();

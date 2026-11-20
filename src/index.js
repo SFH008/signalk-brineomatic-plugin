@@ -4,6 +4,7 @@ const { BoardProxyManager } = require("./board-proxy.js");
 const { N2KPublisher } = require("./n2k-publisher.js");
 const createControls = require("./watermaker-controls.js");
 const publishResults = require("./watermaker-notifications.js");
+const createPlotterExtension = require("./plotter-extension.js");
 const openApi = require("./openApi.json");
 const pkg = require("../package.json");
 
@@ -30,6 +31,7 @@ module.exports = function (app) {
   plugin.unsubscribes = [];
   const controls = createControls(app, plugin);
   const alarms = new Map();
+  const plotterExtension = createPlotterExtension(app, plugin.id, pkg.version);
 
   plugin.start = function (options, _restartPlugin) {
     app.debug(`YarrboardClient.version: ${YarrboardClient.version}`);
@@ -73,10 +75,12 @@ module.exports = function (app) {
 
     plugin.boardProxies = new BoardProxyManager(app);
     plugin.boardProxies.start(descriptors);
+    plotterExtension.start();
   };
 
   plugin.stop = function () {
     app.debug("Plugin stopped");
+    plotterExtension.stop();
     controls.stop();
     alarms.clear();
 
